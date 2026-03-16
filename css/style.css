@@ -1,0 +1,655 @@
+/* ================================================================
+   style.css  —  CineRate Movie Listing & Rating Website
+   ================================================================
+   TABLE OF CONTENTS
+   ─────────────────
+   1.  CSS Variables (Design Tokens)
+   2.  Reset & Base
+   3.  Header / Navbar
+   4.  Hero Section
+   5.  Search Bar
+   6.  Filter Bar
+   7.  Movie Grid
+   8.  Movie Card
+   9.  Star Rating Widget
+   10. Modal (Movie Detail Popup)
+   11. Toast Notification
+   12. Footer
+   13. Scrollbar
+   14. Image Loading & Fallback
+   15. Responsive Breakpoints
+================================================================ */
+
+
+/* ── 1. CSS VARIABLES (Design Tokens) ─────────────────────────
+   Change these to retheme the entire site instantly.
+─────────────────────────────────────────────────────────────── */
+:root {
+  --bg-dark:    #0a0a0f;       /* Main page background           */
+  --bg-card:    #13131a;       /* Movie card background          */
+  --bg-modal:   #1a1a26;       /* Modal popup background         */
+  --gold:       #f5c518;       /* Primary accent (stars, CTA)    */
+  --gold-dim:   #7a6200;       /* Unselected star colour         */
+  --text-main:  #f0f0f5;       /* Primary text                   */
+  --text-muted: #8888a0;       /* Secondary / placeholder text   */
+  --border:     #2a2a3a;       /* Subtle border colour           */
+  --radius:     14px;          /* Card corner radius             */
+  --transition: 0.3s ease;     /* Default animation speed        */
+}
+
+
+/* ── 2. RESET & BASE ───────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+
+/* ── 3. HEADER / NAVBAR ────────────────────────────────────── */
+header {
+  position: sticky;         /* Sticks to top on scroll          */
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 10, 15, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+/* Logo (icon + brand text) */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.logo-icon { font-size: 1.6rem; }
+.logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+/* Nav links */
+nav { display: flex; gap: 28px; }
+nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color var(--transition);
+}
+nav a:hover,
+nav a.active { color: var(--text-main); }
+
+
+/* ── 4. HERO SECTION ───────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 64px 5% 48px;
+  background: linear-gradient(180deg, #10101a 0%, var(--bg-dark) 100%);
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);  /* Fluid font size */
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+.hero h1 span { color: var(--gold); }
+
+.hero p {
+  color: var(--text-muted);
+  max-width: 520px;
+  margin: 0 auto 36px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+
+/* ── 5. SEARCH BAR ─────────────────────────────────────────── */
+.search-wrap {
+  display: flex;
+  align-items: center;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 10px 20px;
+  gap: 10px;
+  transition: border-color var(--transition);
+}
+/* Gold border appears when the input is focused */
+.search-wrap:focus-within { border-color: var(--gold); }
+
+.search-wrap span { font-size: 1.1rem; color: var(--text-muted); }
+
+.search-wrap input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+}
+.search-wrap input::placeholder { color: var(--text-muted); }
+
+
+/* ── 6. FILTER BAR ─────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 24px 5%;
+}
+
+/* Genre filter pill buttons */
+.filter-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all var(--transition);
+}
+.filter-btn:hover,
+.filter-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #000;
+}
+
+/* Sort dropdown */
+.sort-select {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color var(--transition);
+}
+.sort-select:focus { border-color: var(--gold); }
+
+
+/* ── 7. MOVIE GRID ─────────────────────────────────────────── */
+.section-title {
+  padding: 0 5% 20px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+}
+.section-title span {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  margin-left: 10px;
+}
+
+/* CSS Grid — auto-fills columns, min 220px each */
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  padding: 0 5% 60px;
+}
+
+/* Shown when search/filter returns zero results */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-muted);
+  padding: 60px 0;
+  font-size: 1.1rem;
+}
+
+
+/* ── 8. MOVIE CARD ─────────────────────────────────────────── */
+.movie-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition),
+              box-shadow var(--transition),
+              border-color var(--transition);
+  animation: fadeUp 0.5s ease both;  /* Entrance animation */
+}
+
+/* Hover: lift card + gold glow */
+.movie-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--gold);
+  border-color: var(--gold);
+}
+
+/* Staggered card entrance animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Poster container */
+.card-poster {
+  position: relative;
+  aspect-ratio: 2 / 3;    /* Standard movie poster ratio */
+  overflow: hidden;
+}
+
+.card-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  position: relative;
+  z-index: 2;
+}
+
+/* Zoom poster image slightly on hover */
+.movie-card:hover .card-poster img { transform: scale(1.06); }
+
+/* Dark gradient overlay (hidden → visible on hover) */
+.poster-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity var(--transition);
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+  z-index: 3;
+}
+.movie-card:hover .poster-overlay { opacity: 1; }
+
+.overlay-hint {
+  font-size: 0.78rem;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Genre pill badge on poster top-right */
+.genre-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 4;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 50px;
+  backdrop-filter: blur(4px);
+}
+
+/* Card body below the poster */
+.card-body { padding: 14px 16px 16px; }
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;    /* "..." if title is too long */
+}
+
+.card-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* Average rating row (stars + number + vote count) */
+.avg-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.avg-star   { color: var(--gold); font-size: 0.9rem; }
+.avg-number { font-size: 0.85rem; font-weight: 600; color: var(--gold); }
+.avg-count  { font-size: 0.75rem; color: var(--text-muted); }
+
+
+/* ── 9. STAR RATING WIDGET ─────────────────────────────────── */
+/*
+  5 clickable star spans.
+  States:  dim (default) → hovered → filled (after click)
+  JS adds/removes these classes based on mouse events.
+*/
+.star-rating {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+.star {
+  cursor: pointer;
+  color: var(--gold-dim);
+  transition: color 0.15s, transform 0.15s;
+  user-select: none;
+}
+.star.hovered,
+.star.filled { color: var(--gold); }
+
+/* Brief scale-pop when a star is clicked */
+.star.pop { animation: starPop 0.25s ease; }
+@keyframes starPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+.rate-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-left: 6px;
+}
+
+
+/* ── 10. MODAL (Movie Detail Popup) ────────────────────────── */
+/*
+  Hidden by default via opacity:0 + pointer-events:none.
+  JS adds class .open to show it with a slide-up animation.
+*/
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;           /* Panel slides up from bottom */
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.modal-backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--bg-modal);
+  border: 1px solid var(--border);
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  max-width: 780px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 32px;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-backdrop.open .modal { transform: translateY(0); }
+
+/* Close (✕) button top-right of modal */
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: var(--border);
+  border: none;
+  color: var(--text-main);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+.modal-close:hover { background: var(--gold); color: #000; }
+
+/* Two-column layout: poster | info */
+.modal-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 28px;
+}
+
+.modal-poster {
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+}
+.modal-poster img { width: 100%; height: 100%; object-fit: cover; }
+
+.modal-info h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+/* Metadata pills (year, genre, director, rating) */
+.modal-meta {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.modal-meta span {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 3px 12px;
+  border-radius: 50px;
+}
+
+.modal-description {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+/* Small uppercase section label (e.g. "CAST", "YOUR RATING") */
+.modal-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* Cast name chips */
+.cast-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.cast-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* "Watch Trailer" CTA button */
+.trailer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+}
+.trailer-btn:hover { opacity: 0.88; transform: scale(1.03); }
+
+/* Rating section inside the modal */
+.modal-rating-wrap {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.modal-rating-wrap .star-rating { font-size: 1.4rem; }
+
+
+/* ── 11. TOAST NOTIFICATION ────────────────────────────────── */
+/*
+  Slides up from the bottom-right corner.
+  JS adds class .show to display it, removes after 2.8s.
+*/
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--gold);
+  color: #000;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  z-index: 999;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+
+/* ── 12. FOOTER ────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 28px 5%;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+footer span { color: var(--gold); }
+
+
+/* ── 13. SCROLLBAR ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+
+/* ── 14. IMAGE LOADING & FALLBACK ──────────────────────────── */
+
+/*
+  Shimmer skeleton — shown while the poster loads.
+  Uses a sliding gradient animation (::before pseudo-element).
+  JS adds class .loaded to the .card-poster → shimmer fades out.
+*/
+.card-poster::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #1a1a26 0%,
+    #2a2a3a 40%,
+    #1a1a26 80%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  z-index: 1;
+  transition: opacity 0.4s ease;
+}
+.card-poster.loaded::before {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/*
+  Fallback tile — injected by JS when a poster image fails to load.
+  Shows a gradient background with genre icon + movie title.
+*/
+.poster-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: var(--text-muted);
+  gap: 10px;
+  padding: 20px;
+  text-align: center;
+}
+.poster-fallback .fb-icon  { font-size: 2.5rem; }
+.poster-fallback .fb-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+.poster-fallback .fb-genre {
+  font-size: 0.7rem;
+  color: var(--gold);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+
+/* ── 15. RESPONSIVE BREAKPOINTS ────────────────────────────── */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .modal-inner { grid-template-columns: 1fr; }  /* Stack poster + info */
+  .modal-poster { max-width: 160px; }
+  nav { display: none; }                         /* Hide nav on small screens */
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .movies-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .modal { padding: 20px 16px; }
+}

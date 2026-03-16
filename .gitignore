@@ -1,0 +1,22 @@
+# ── OS files ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor / IDE folders ────────────────────────────────────────
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ── Logs ────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ── Node (if http-server used locally) ──────────────────────────
+node_modules/
+package-lock.json
+
+# ── Environment / secrets ───────────────────────────────────────
+.env
+.env.local

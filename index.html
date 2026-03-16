@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="description" content="CineRate – Browse and rate your favourite movies." />
+
+  <title>CineRate – Movie Listing &amp; Rating</title>
+
+  <!-- Google Fonts: Playfair Display (headings) + DM Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===================== HEADER / NAVBAR ===================== -->
+  <header>
+    <a class="logo" href="#">
+      <span class="logo-icon">🎬</span>
+      <span class="logo-text">CineRate</span>
+    </a>
+    <nav>
+      <a href="#" class="active">Movies</a>
+      <a href="#">Top Rated</a>
+      <a href="#">New Releases</a>
+    </nav>
+  </header>
+
+  <!-- ===================== HERO SECTION ======================== -->
+  <section class="hero">
+    <h1>Discover &amp; Rate <span>Great Films</span></h1>
+    <p>
+      Browse our curated collection of movies. Click any card to view
+      details, and leave your personal star rating.
+    </p>
+
+    <!-- Search Bar -->
+    <div class="search-wrap">
+      <span>🔍</span>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by title…"
+        aria-label="Search movies"
+      />
+    </div>
+  </section>
+
+  <!-- ===================== FILTER BAR ========================= -->
+  <!--
+    Genre filter buttons + sort dropdown.
+    JS reads the data-genre attribute on each button to filter the list.
+  -->
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-genre="All">All</button>
+    <button class="filter-btn" data-genre="Action">Action</button>
+    <button class="filter-btn" data-genre="Superhero">Superhero</button>
+    <button class="filter-btn" data-genre="Drama">Drama</button>
+    <button class="filter-btn" data-genre="Sci-Fi">Sci-Fi</button>
+    <button class="filter-btn" data-genre="Thriller">Thriller</button>
+    <button class="filter-btn" data-genre="Animation">Animation</button>
+
+    <select class="sort-select" id="sortSelect" aria-label="Sort movies">
+      <option value="default">Sort: Default</option>
+      <option value="rating">Sort: Top Rated</option>
+      <option value="year-desc">Sort: Newest</option>
+      <option value="year-asc">Sort: Oldest</option>
+      <option value="title">Sort: A → Z</option>
+    </select>
+  </div>
+
+  <!-- ===================== MOVIE GRID ========================= -->
+  <!-- Cards are injected dynamically by js/app.js -->
+  <main>
+    <p class="section-title" id="resultsLabel">
+      All Movies <span id="resultsCount"></span>
+    </p>
+    <div class="movies-grid" id="moviesGrid"></div>
+  </main>
+
+  <!-- ===================== DETAIL MODAL ======================= -->
+  <!--
+    Hidden by default (opacity 0, pointer-events none via CSS).
+    Opened when a card is clicked; closed via button, backdrop click, or Escape key.
+  -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modalClose" aria-label="Close modal">✕</button>
+      <div class="modal-inner" id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- ===================== TOAST NOTIFICATION ================= -->
+  <!-- A brief popup shown when a user submits a star rating -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===================== FOOTER ============================= -->
+  <footer>
+    Built with <span>❤️</span> · CineRate Movie UI · Internship Project
+  </footer>
+
+  <!-- Scripts: data.js must load before app.js -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
